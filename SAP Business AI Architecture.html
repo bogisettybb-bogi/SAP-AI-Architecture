@@ -1,0 +1,751 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.root{font-family:var(--font-sans);width:100%}
+.hdr{text-align:center;padding:20px 0 6px}
+.hdr-title{font-size:19px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.hdr-sub{font-size:12px;color:var(--color-text-tertiary);letter-spacing:.02em}
+.main{display:flex;gap:14px;margin-top:14px;align-items:flex-start}
+.left{flex:0 0 318px}
+.right{flex:1;min-height:360px}
+.layer{border-radius:10px;margin-bottom:6px;padding:9px 10px 8px;border:1px solid transparent}
+.layer-hdr{display:flex;align-items:baseline;gap:6px;margin-bottom:6px}
+.layer-num{font-size:9px;font-weight:500;letter-spacing:.07em;opacity:.7}
+.layer-name{font-size:11px;font-weight:500}
+.layer-sub{font-size:10px;color:var(--color-text-tertiary);margin-bottom:5px;padding-left:2px;font-style:italic}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font-size:11px;font-weight:500;padding:4px 10px;border-radius:14px;cursor:pointer;border:1.5px solid transparent;transition:transform .12s;user-select:none;line-height:1.3}
+.chip:hover{transform:translateY(-1px)}
+.chip.active{border-width:2px}
+.l6{background:#FFFBF4;border-color:#FAC775}
+.l6 .layer-num{color:#854F0B}
+.l6 .layer-name{color:#633806}
+.l6 .chip{background:#FAEEDA;color:#633806;border-color:#FAC775}
+.l6 .chip.active{background:#FAC775;border-color:#412402}
+.l6-inner{border:1.5px dashed #FAC775;border-radius:8px;padding:6px 8px;margin-top:4px}
+.l6-inner-label{font-size:9px;font-weight:500;color:#854F0B;letter-spacing:.06em;margin-bottom:5px}
+.l5{background:#F0FBF7;border-color:#9FE1CB}
+.l5 .layer-num{color:#0F6E56}
+.l5 .layer-name{color:#085041}
+.l5 .chip{background:#E1F5EE;color:#085041;border-color:#9FE1CB}
+.l5 .chip.active{background:#9FE1CB;border-color:#04342C}
+.l4{background:#FEF3EF;border-color:#F5C4B3}
+.l4 .layer-num{color:#993C1D}
+.l4 .layer-name{color:#712B13}
+.l4 .chip{background:#FAECE7;color:#712B13;border-color:#F5C4B3}
+.l4 .chip.active{background:#F5C4B3;border-color:#4A1B0C}
+.l3{background:#F2FAF5;border-color:#C0DD97}
+.l3 .layer-num{color:#3B6D11}
+.l3 .layer-name{color:#27500A}
+.l3 .chip{background:#EAF3DE;color:#27500A;border-color:#C0DD97}
+.l3 .chip.active{background:#C0DD97;border-color:#173404}
+.l3-group{margin-bottom:5px}
+.l3-group-label{font-size:9px;font-weight:500;color:#3B6D11;letter-spacing:.06em;margin-bottom:3px;padding-left:1px}
+.l2{background:#EEF5FC;border-color:#B5D4F4}
+.l2 .layer-num{color:#185FA5}
+.l2 .layer-name{color:#0C447C}
+.l2 .chip{background:#E6F1FB;color:#0C447C;border-color:#B5D4F4}
+.l2 .chip.active{background:#B5D4F4;border-color:#042C53}
+.l1{background:#F2F1ED;border-color:#D3D1C7}
+.l1 .layer-num{color:#5F5E5A}
+.l1 .layer-name{color:#444441}
+.l1 .chip{background:#F1EFE8;color:#444441;border-color:#D3D1C7}
+.l1 .chip.active{background:#D3D1C7;border-color:#2C2C2A}
+.arr-wrap{text-align:center;margin:1px 0;color:var(--color-text-tertiary);font-size:13px;line-height:1}
+.card{background:var(--color-background-primary);border:1px solid var(--color-border-tertiary);border-radius:10px;padding:18px;display:none;animation:fi .14s ease}
+.card.visible{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px}
+.card-title{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.card-badge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:9px;white-space:nowrap;flex-shrink:0}
+.card-tagline{font-size:13px;color:var(--color-text-secondary);font-style:italic;border-left:3px solid var(--color-border-secondary);padding-left:10px;margin:9px 0 11px;line-height:1.6}
+.sec{font-size:10px;font-weight:500;letter-spacing:.07em;color:var(--color-text-tertiary);margin-bottom:5px;margin-top:13px}
+.bul{display:flex;gap:7px;margin-bottom:5px;font-size:12.5px;color:var(--color-text-secondary);line-height:1.5}
+.bul::before{content:"";display:block;width:5px;height:5px;border-radius:50%;background:var(--color-border-primary);margin-top:6px;flex-shrink:0}
+.exbox{background:var(--color-background-secondary);border-radius:8px;padding:11px 13px;margin-top:11px}
+.exlabel{font-size:10px;font-weight:500;letter-spacing:.07em;color:var(--color-text-tertiary);margin-bottom:7px}
+.exitem{font-size:12.5px;color:var(--color-text-secondary);margin-bottom:6px;line-height:1.6;padding-left:9px;border-left:2px solid var(--color-border-tertiary)}
+.exitem strong{color:var(--color-text-primary);font-weight:500}
+.who{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.who-pill{font-size:11px;padding:3px 9px;border-radius:6px;background:var(--color-background-secondary);color:var(--color-text-secondary);border:1px solid var(--color-border-tertiary)}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:260px;color:var(--color-text-tertiary);font-size:13px;border:1.5px dashed var(--color-border-tertiary);border-radius:10px;text-align:center;line-height:2;gap:2px}
+.foot{text-align:center;padding:12px 0 2px;font-size:11px;color:var(--color-text-tertiary)}
+</style>
+<div class="root">
+<div class="hdr">
+  <div class="hdr-title">SAP and Business AI Architecture</div>
+  <div class="hdr-sub">Learning Edition - click any component to understand what it does, with real examples</div>
+</div>
+<div class="main">
+<div class="left">
+  <div class="layer l6">
+    <div class="layer-hdr"><span class="layer-num">LAYER 6</span><span class="layer-name">SAP BTM (Business Transformation Management)</span></div>
+    <div class="layer-sub">Governance umbrella connecting business strategy to enterprise architecture and process optimisation</div>
+    <div class="l6-inner">
+      <div class="l6-inner-label">TOOLS INSIDE BTM</div>
+      <div class="chips">
+        <span class="chip" onclick="show('btm',this)">BTM Framework</span>
+        <span class="chip" onclick="show('leanix',this)">LeanIX</span>
+        <span class="chip" onclick="show('signavio',this)">Signavio</span>
+        <span class="chip" onclick="show('cloudalm',this)">Cloud ALM</span>
+        <span class="chip" onclick="show('sapforme',this)">SAP for Me</span>
+        <span class="chip" onclick="show('sct',this)">Sustainability Control Tower</span>
+      </div>
+    </div>
+  </div>
+  <div class="arr-wrap">↓</div>
+  <div class="layer l5">
+    <div class="layer-hdr"><span class="layer-num">LAYER 5</span><span class="layer-name">User Experience</span></div>
+    <div class="chips">
+      <span class="chip" onclick="show('joule',this)">Joule</span>
+      <span class="chip" onclick="show('joulecode',this)">Joule Code</span>
+      <span class="chip" onclick="show('fiori',this)">SAP Start / Fiori</span>
+      <span class="chip" onclick="show('workzone',this)">Build Work Zone</span>
+      <span class="chip" onclick="show('mobilestart',this)">Mobile Start</span>
+    </div>
+  </div>
+  <div class="arr-wrap">↓</div>
+  <div class="layer l4">
+    <div class="layer-hdr"><span class="layer-num">LAYER 4</span><span class="layer-name">Business Applications</span></div>
+    <div class="chips">
+      <span class="chip" onclick="show('s4',this)">S/4HANA Cloud</span>
+      <span class="chip" onclick="show('sf',this)">SuccessFactors</span>
+      <span class="chip" onclick="show('ariba',this)">Ariba</span>
+      <span class="chip" onclick="show('ibp',this)">IBP</span>
+      <span class="chip" onclick="show('cx',this)">SAP CX</span>
+      <span class="chip" onclick="show('concur',this)">Concur</span>
+    </div>
+  </div>
+  <div class="arr-wrap">↓</div>
+  <div class="layer l3">
+    <div class="layer-hdr"><span class="layer-num">LAYER 3</span><span class="layer-name">SAP BTP (Business Technology Platform)</span></div>
+    <div class="layer-sub">Global Account - Subaccounts - Environments</div>
+    <div class="l3-group"><div class="l3-group-label">AI SERVICES</div>
+      <div class="chips">
+        <span class="chip" onclick="show('aicore',this)">AI Core</span>
+        <span class="chip" onclick="show('genaihub',this)">GenAI Hub</span>
+        <span class="chip" onclick="show('ailaunchpad',this)">AI Launchpad</span>
+      </div>
+    </div>
+    <div class="l3-group"><div class="l3-group-label">DEVELOPMENT</div>
+      <div class="chips">
+        <span class="chip" onclick="show('buildapps',this)">Build Apps</span>
+        <span class="chip" onclick="show('buildpa',this)">Build Process Automation</span>
+      </div>
+    </div>
+    <div class="l3-group"><div class="l3-group-label">INTEGRATION AND RUNTIME</div>
+      <div class="chips">
+        <span class="chip" onclick="show('integration',this)">Integration Suite</span>
+        <span class="chip" onclick="show('kyma',this)">Kyma Runtime</span>
+        <span class="chip" onclick="show('cf',this)">Cloud Foundry</span>
+      </div>
+    </div>
+    <div class="l3-group"><div class="l3-group-label">ACCOUNT STRUCTURE</div>
+      <div class="chips">
+        <span class="chip" onclick="show('globalaccount',this)">Global Account</span>
+        <span class="chip" onclick="show('subaccount',this)">Subaccount</span>
+      </div>
+    </div>
+  </div>
+  <div class="arr-wrap">↓</div>
+  <div class="layer l2">
+    <div class="layer-hdr"><span class="layer-num">LAYER 2</span><span class="layer-name">Data Foundation</span></div>
+    <div class="chips">
+      <span class="chip" onclick="show('hana',this)">HANA Cloud</span>
+      <span class="chip" onclick="show('vector',this)">Vector Engine</span>
+      <span class="chip" onclick="show('datasphere',this)">Datasphere</span>
+      <span class="chip" onclick="show('sac',this)">Analytics Cloud</span>
+      <span class="chip" onclick="show('mdg',this)">Master Data Governance</span>
+    </div>
+  </div>
+  <div class="arr-wrap">↓</div>
+  <div class="layer l1">
+    <div class="layer-hdr"><span class="layer-num">LAYER 1</span><span class="layer-name">Hyperscaler Infrastructure</span></div>
+    <div class="layer-sub">RISE with SAP runs on these cloud providers</div>
+    <div class="chips">
+      <span class="chip" onclick="show('aws',this)">AWS</span>
+      <span class="chip" onclick="show('azure',this)">Azure</span>
+      <span class="chip" onclick="show('gcp',this)">GCP</span>
+    </div>
+  </div>
+</div>
+<div class="right">
+  <div class="empty" id="empty"><span style="font-size:22px;opacity:.3">←</span><span>Click any component<br>to learn what it does</span></div>
+
+  <div class="card" id="card-btm">
+    <div class="card-top"><div class="card-title">BTM Framework</div><span class="card-badge" style="background:#FAEEDA;color:#633806">Governance umbrella</span></div>
+    <div class="card-tagline">Business Transformation Management. The methodology answering what every CIO and CFO asks: how is our technology investment actually driving business transformation?</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Connects business strategy to enterprise architecture and continuous process optimisation</div>
+    <div class="bul">Uses data from LeanIX, Signavio, and Cloud ALM to build the complete transformation story</div>
+    <div class="bul">Tracks progress of cloud migration, AI adoption, and process improvement against strategic goals</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Board justification:</strong> CIO shows the board that S/4HANA migration cost 12M EUR but delivered 18M EUR in efficiency gains over 24 months, with data from Signavio and LeanIX backing every number</div>
+    <div class="exitem"><strong>AI value tracking:</strong> After automating invoice matching with AI, BTM tracks hours saved per month and converts it into a running financial benefit figure for the CFO dashboard</div>
+    <div class="exitem"><strong>Strategy alignment:</strong> BTM reveals one business unit consuming 60% of GenAI Hub tokens with low business outcome. Investment shifts to higher-value transformation use cases aligned to the corporate strategy</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">CIO office</span><span class="who-pill">CFO</span><span class="who-pill">SAP account teams</span><span class="who-pill">Transformation leads</span></div>
+  </div>
+
+  <div class="card" id="card-leanix">
+    <div class="card-top"><div class="card-title">LeanIX</div><span class="card-badge" style="background:#FAEEDA;color:#633806">Inside BTM</span></div>
+    <div class="card-tagline">Enterprise Architecture Management. The live map of every application in the company, what it does, what it costs, and what needs to change.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Maintains a live inventory of all applications mapped to business capabilities</div>
+    <div class="bul">Flags technical debt, end-of-life systems, and redundant tools across the landscape</div>
+    <div class="bul">Discovers shadow IT via integrations with SSO providers, expense systems, and CASB tools</div>
+    <div class="bul">Feeds BTM with the application landscape picture for transformation planning and cost reporting</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Cost discovery:</strong> LeanIX reveals 6 teams running separate expense tools at 340K EUR combined. They consolidate to one and save 260K EUR annually</div>
+    <div class="exitem"><strong>S/4 readiness:</strong> Before migration, LeanIX maps all 180 interfaces from the legacy ERP. Team immediately sees the 23 high-risk ones needing custom migration plans</div>
+    <div class="exitem"><strong>Shadow IT discovery:</strong> LeanIX integrates with the company's Entra ID SSO and expense system to surface 14 unapproved SaaS tools employees are logging into and expensing. IT leadership is alerted to compliance risks</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Enterprise architects</span><span class="who-pill">CIO office</span><span class="who-pill">Transformation leads</span></div>
+  </div>
+
+  <div class="card" id="card-signavio">
+    <div class="card-top"><div class="card-title">Signavio</div><span class="card-badge" style="background:#FAEEDA;color:#633806">Inside BTM</span></div>
+    <div class="card-tagline">Process intelligence. Shows how your business processes actually run versus how you think they run, then finds exactly where time and money are being lost.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Process mining: reads S/4HANA event logs and auto-discovers every real process variant</div>
+    <div class="bul">Process modelling: documents agreed processes in BPMN standard notation</div>
+    <div class="bul">Benchmarks your processes against SAP best practice reference models globally</div>
+    <div class="bul">Feeds BTM with process improvement data to quantify business transformation delivered</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Hidden complexity:</strong> A company believes their P2P process has 4 steps. Signavio reveals 47 real variants. One variant takes 34 days with 9 manual approvals. Fixing just that one cuts cycle time by 60%</div>
+    <div class="exitem"><strong>Root cause in hours:</strong> Signavio finds 23% of invoice exceptions come from one plant consistently receiving goods before the PO is created, a problem that would have taken months to find manually</div>
+    <div class="exitem"><strong>Pre go-live check:</strong> Before S/4 go-live, Signavio identifies which current processes need redesign to match SAP best practice, avoiding costly post go-live rework</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Process owners</span><span class="who-pill">Transformation leads</span><span class="who-pill">COO office</span></div>
+  </div>
+
+  <div class="card" id="card-cloudalm">
+    <div class="card-top"><div class="card-title">Cloud ALM</div><span class="card-badge" style="background:#FAEEDA;color:#633806">Inside BTM</span></div>
+    <div class="card-tagline">SAP's project and operations command centre for cloud customers. Replaces Solution Manager for RISE and S/4HANA Cloud engagements.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Implementation mode: task tracking, test management, fit-to-standard workshops, cutover</div>
+    <div class="bul">Operations mode: business process monitoring, job scheduling, integration health, alerting</div>
+    <div class="bul">Change and transport management for cloud environments</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Go-live weekend:</strong> Project team tracks all 340 cutover tasks in real time. Any task running late auto-escalates to the responsible person before it impacts the timeline</div>
+    <div class="exitem"><strong>Silent failure caught:</strong> Daily payment run job fails at 2am Sunday. Cloud ALM alerts the on-call team before finance arrives Monday to find unpaid vendors</div>
+    <div class="exitem"><strong>Integration backlog:</strong> iDoc queue builds between S/4 and a warehouse system. Alert fires at 500 stuck messages before it becomes 50,000 and causes a stock discrepancy</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Project managers</span><span class="who-pill">Basis teams</span><span class="who-pill">Operations</span></div>
+  </div>
+
+  <div class="card" id="card-sapforme">
+    <div class="card-top"><div class="card-title">SAP for Me</div><span class="card-badge" style="background:#FAEEDA;color:#633806">Inside BTM</span></div>
+    <div class="card-tagline">Customer self-service portal at me.sap.com. Your single view of SAP system health, support tickets, licences, and maintenance status.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Shows full SAP system landscape with real-time health indicators</div>
+    <div class="bul">Manages support tickets and surfaces relevant SAP Notes for your systems</div>
+    <div class="bul">Displays licence entitlements, maintenance dates, and contract details</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Security note alert:</strong> SAP for Me flags a critical security note not applied in 60 days and links directly to the maintenance planner to schedule patching</div>
+    <div class="exitem"><strong>Licence saving:</strong> IT director finds 340 named users who have not logged in for 6 months. Removes those licences before renewal and saves 180K EUR</div>
+    <div class="exitem"><strong>P1 visibility:</strong> A critical incident shows ticket status, SAP engineer assigned, and estimated resolution time with direct escalation if SLA is about to breach</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">IT admins</span><span class="who-pill">Basis teams</span><span class="who-pill">Customer IT</span></div>
+  </div>
+
+  <div class="card" id="card-sct">
+    <div class="card-top"><div class="card-title">Sustainability Control Tower</div><span class="card-badge" style="background:#FAEEDA;color:#633806">Inside BTM</span></div>
+    <div class="card-tagline">SAP's ESG intelligence platform. Collects carbon, energy, water, and waste data across the value chain and turns it into auditable sustainability reporting.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Ingests emissions data from S/4HANA, IoT sensors, logistics providers, and suppliers</div>
+    <div class="bul">Calculates Scope 1, 2, and 3 carbon footprint automatically across the value chain</div>
+    <div class="bul">Produces audit-ready ESG reports aligned to GRI, TCFD, and CSRD frameworks</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Scope 3 tracking:</strong> A manufacturer connects 400 suppliers. Scope 3 emissions are calculated automatically, replacing a 6-month manual data collection exercise</div>
+    <div class="exitem"><strong>CSRD compliance:</strong> A European company generates its mandatory CSRD sustainability report with full data lineage, ready for external audit</div>
+    <div class="exitem"><strong>Carbon target tracking:</strong> Company sets a net-zero target for 2040. SCT tracks progress monthly and alerts when a business unit is off track against the reduction roadmap</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Sustainability teams</span><span class="who-pill">CFO office</span><span class="who-pill">Compliance</span><span class="who-pill">Board</span></div>
+  </div>
+
+  <div class="card" id="card-joule">
+    <div class="card-top"><div class="card-title">Joule</div><span class="card-badge" style="background:#E1F5EE;color:#085041">AI Copilot</span></div>
+    <div class="card-tagline">SAP's AI assistant embedded across every app. Already knows your role, your data access, and your organisation context so it gives real answers, not generic ones.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Answers natural language questions and returns live SAP data instantly</div>
+    <div class="bul">Initiates transactions without navigating menus or memorising transaction codes</div>
+    <div class="bul">Works across S/4HANA, SuccessFactors, and Ariba in a single conversation</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Finance:</strong> Joule queries S/4 for all invoices overdue more than 30 days from German suppliers and returns a live filtered list in seconds</div>
+    <div class="exitem"><strong>HR:</strong> Joule pulls from SuccessFactors and lists names and deadlines for team members who have not completed mandatory compliance training</div>
+    <div class="exitem"><strong>Procurement:</strong> Joule creates a PO draft for 500 units of material X from vendor Y, ready for one-click review and posting</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Finance users</span><span class="who-pill">HR managers</span><span class="who-pill">Procurement</span><span class="who-pill">All business users</span></div>
+  </div>
+
+  <div class="card" id="card-joulecode">
+    <div class="card-top"><div class="card-title">Joule Code</div><span class="card-badge" style="background:#E1F5EE;color:#085041">Developer AI</span></div>
+    <div class="card-tagline">AI-powered coding assistant for full-stack enterprise development via SAP Build Code. Supports Java, JavaScript, SAPUI5, CAP model, and ABAP - not just one language.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Generates code from plain English across Java, JavaScript, SAPUI5, CAP model, and ABAP</div>
+    <div class="bul">Explains legacy ABAP code and full-stack applications that teams have inherited</div>
+    <div class="bul">Writes unit tests, suggests refactors, and flags code quality issues automatically</div>
+    <div class="bul">Deeply integrated with SAP Build Code, the recommended developer tooling on BTP</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>CAP service generation:</strong> Developer asks for a CAP OData service exposing purchase orders with role-based filtering. Joule Code generates the complete Node.js CAP project structure, entity model, and service definition</div>
+    <div class="exitem"><strong>SAPUI5 scaffolding:</strong> Developer requests a Fiori list report for material stock levels with drill-down. Joule Code generates the full SAPUI5 view, controller, and manifest in seconds</div>
+    <div class="exitem"><strong>Legacy ABAP rescue:</strong> Developer pastes a 15-year-old ABAP program nobody understands. Joule Code explains exactly what it does in plain English and suggests a modern refactored version</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">ABAP developers</span><span class="who-pill">Full-stack BTP devs</span><span class="who-pill">CAP engineers</span><span class="who-pill">Technical leads</span></div>
+  </div>
+
+  <div class="card" id="card-fiori">
+    <div class="card-top"><div class="card-title">SAP Start / Fiori</div><span class="card-badge" style="background:#E1F5EE;color:#085041">User Experience</span></div>
+    <div class="card-tagline">Fiori is the design system. SAP Start is the personalised home screen. Together they are the face of modern SAP where AI surfaces what matters before you search for it.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Role-driven tile launchpad replacing old SAP GUI transaction screens</div>
+    <div class="bul">SAP Start shows personalised KPIs, pending tasks, and AI-generated alerts on every login</div>
+    <div class="bul">Responsive across desktop, tablet, and mobile with no separate app needed</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Plant manager morning:</strong> Logs in and sees 5 critical KPIs, 3 maintenance approvals, and a Joule alert about an overdue machine inspection, all before opening a single application</div>
+    <div class="exitem"><strong>Mobile CFO:</strong> Approves a 2M EUR capex request from a phone during a flight using a Fiori app with full budget context on one screen</div>
+    <div class="exitem"><strong>Day 1 operator:</strong> A warehouse operator completes their first goods receipt using a simplified Fiori app designed for their role, no SAP training course needed</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">All SAP users</span><span class="who-pill">UX teams</span><span class="who-pill">IT admins</span></div>
+  </div>
+
+  <div class="card" id="card-workzone">
+    <div class="card-top"><div class="card-title">Build Work Zone</div><span class="card-badge" style="background:#E1F5EE;color:#085041">User Experience</span></div>
+    <div class="card-tagline">The digital front door to your entire SAP landscape. One role-based portal where all apps, approvals, and Joule live together with no app switching and no context loss.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Aggregates all Fiori apps, third-party tools, and notifications in one role-based launchpad</div>
+    <div class="bul">Joule runs as a persistent chat panel accessible from every page across all apps</div>
+    <div class="bul">Most common primary Joule deployment surface, activate once, available to all user groups</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Manager morning:</strong> Opens Work Zone, sees 3 PO approvals, 1 leave request, and a Joule alert about 2 POs exceeding vendor limits. Handles everything without switching between S/4HANA and SuccessFactors</div>
+    <div class="exitem"><strong>New joiner day 1:</strong> Logs in and sees only apps relevant to their role, a guided onboarding checklist from HR, and IT setup tasks, all in one place</div>
+    <div class="exitem"><strong>Field technician:</strong> Uses Work Zone on mobile to log maintenance orders, check spare parts, and get AI-suggested repair steps from Joule, one screen, one session</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">All employees</span><span class="who-pill">IT teams</span><span class="who-pill">HR and ops</span></div>
+  </div>
+
+  <div class="card" id="card-mobilestart">
+    <div class="card-top"><div class="card-title">SAP Mobile Start</div><span class="card-badge" style="background:#E1F5EE;color:#085041">User Experience</span></div>
+    <div class="card-tagline">The mobile companion to SAP Start. One app on your phone giving access to all your SAP Fiori apps, approvals, and AI alerts on the go.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Single mobile app replacing multiple SAP mobile apps across modules</div>
+    <div class="bul">Push notifications for pending approvals, alerts, and Joule insights</div>
+    <div class="bul">Works with SAP Start configuration, no separate mobile setup needed</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Approvals on the move:</strong> A purchasing manager receives a push notification for an urgent PO approval while travelling. Opens Mobile Start, reviews full PO details with budget context, and approves in 30 seconds</div>
+    <div class="exitem"><strong>Shop floor access:</strong> A production supervisor uses Mobile Start on a tablet to confirm production orders and log quality inspection results without going back to a desktop</div>
+    <div class="exitem"><strong>AI alert:</strong> Joule sends a proactive alert to Mobile Start about a top customer with 3 overdue invoices totalling 240K EUR. The account manager calls before the customer escalates</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Mobile workforce</span><span class="who-pill">Managers on the move</span><span class="who-pill">Field teams</span></div>
+  </div>
+
+  <div class="card" id="card-s4">
+    <div class="card-top"><div class="card-title">S/4HANA Cloud</div><span class="card-badge" style="background:#FAECE7;color:#712B13">Business App</span></div>
+    <div class="card-tagline">SAP's flagship ERP. Finance, supply chain, manufacturing, and sales with AI built directly into the core processes where real business work happens.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Core ERP covering Finance, Procurement, Manufacturing, Sales, and Asset Management</div>
+    <div class="bul">AI embedded in key processes: invoice matching, payment prediction, GL coding, demand signals</div>
+    <div class="bul">Joule available natively inside S/4 screens for all business users</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>AP automation:</strong> 800 invoices arrive daily. AI matches 720 automatically to POs and goods receipts with no human touch. Only 80 exceptions go to the AP team for review</div>
+    <div class="exitem"><strong>Payment prediction:</strong> AI flags 23 customers likely to pay late next month so treasury adjusts cash flow forecasts proactively before due dates arrive</div>
+    <div class="exitem"><strong>Smart GL coding:</strong> Invoice arrives without a cost centre. AI suggests the correct account based on vendor, amount, and historical patterns. One click to confirm and post</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Finance</span><span class="who-pill">Supply chain</span><span class="who-pill">Manufacturing</span><span class="who-pill">Sales ops</span></div>
+  </div>
+
+  <div class="card" id="card-sf">
+    <div class="card-top"><div class="card-title">SuccessFactors</div><span class="card-badge" style="background:#FAECE7;color:#712B13">Business App</span></div>
+    <div class="card-tagline">SAP's HR cloud covering the full employee lifecycle from hire to retire, with AI that understands your workforce automatically.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Core HR, payroll, talent management, learning, and recruiting end to end</div>
+    <div class="bul">AI infers employee skills from job history, completed courses, and project activity</div>
+    <div class="bul">Joule answers manager queries about team performance, training gaps, and headcount</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Skills inference:</strong> An engineer completes a Python course and works on 3 data projects. SuccessFactors AI adds "data engineering" and "Python" to their profile automatically, no manual entry needed</div>
+    <div class="exitem"><strong>Hiring match:</strong> 340 applicants arrive for one role. AI scores all of them and surfaces the top 12 with the strongest skill match, saving recruiters 3 days of CV screening</div>
+    <div class="exitem"><strong>Manager query via Joule:</strong> Joule answers instantly with names and dates from SuccessFactors for all team members due a performance review who have not had a 1:1 in 6 weeks</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">HR teams</span><span class="who-pill">Managers</span><span class="who-pill">Employees</span><span class="who-pill">Recruiters</span></div>
+  </div>
+
+  <div class="card" id="card-ariba">
+    <div class="card-top"><div class="card-title">SAP Ariba</div><span class="card-badge" style="background:#FAECE7;color:#712B13">Business App</span></div>
+    <div class="card-tagline">SAP's procurement and supplier network connecting buyers and 5M+ suppliers globally, with AI spotting risk and spend leakage before they become costly problems.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Source to pay: sourcing, contracts, procurement, and invoicing end to end</div>
+    <div class="bul">AI scores supplier risk using financial signals, news feeds, and transaction patterns</div>
+    <div class="bul">Identifies maverick spend where purchases bypass contracted vendors at higher prices</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Early risk warning:</strong> AI detects financial stress signals for a tier-1 semiconductor supplier 6 weeks before they announce difficulties. Procurement qualifies a backup supplier in time</div>
+    <div class="exitem"><strong>Spend leakage:</strong> AI finds 18% of office supply purchases going to non-contracted vendors at higher prices. Category manager saves 90K EUR in the next quarter</div>
+    <div class="exitem"><strong>Contract priority:</strong> AI scans 200 expiring contracts and highlights the 15 needing urgent renegotiation based on spend volume and current risk score</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Procurement</span><span class="who-pill">Supply chain</span><span class="who-pill">Finance</span><span class="who-pill">Legal</span></div>
+  </div>
+
+  <div class="card" id="card-ibp">
+    <div class="card-top"><div class="card-title">SAP IBP</div><span class="card-badge" style="background:#FAECE7;color:#712B13">Business App</span></div>
+    <div class="card-tagline">Integrated Business Planning. AI-powered supply chain planning replacing the Excel-based S&amp;OP cycle most companies are still running today.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Demand sensing and forecasting using ML on real-time sales and market signals</div>
+    <div class="bul">Supply, inventory, and S&amp;OP planning with live constraint modelling</div>
+    <div class="bul">Scenario simulation for supply disruptions, demand spikes, or new product launches</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Seasonal accuracy:</strong> Consumer goods company forecasts Black Friday demand 10 weeks out using IBP AI, factoring in social media trends alongside sales history. Stock-out rate drops 34%</div>
+    <div class="exitem"><strong>Disruption response:</strong> Port strike announced. IBP simulates 3 alternative supply routes in minutes and recommends the lowest-cost option. Decision made in 2 hours, not 2 weeks</div>
+    <div class="exitem"><strong>Slow-mover alert:</strong> AI flags 47 SKUs building excess inventory 8 weeks before they become write-off risk, triggering early promotional pricing actions</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Supply chain planners</span><span class="who-pill">Operations</span><span class="who-pill">Finance</span></div>
+  </div>
+
+  <div class="card" id="card-cx">
+    <div class="card-top"><div class="card-title">SAP CX</div><span class="card-badge" style="background:#FAECE7;color:#712B13">Business App</span></div>
+    <div class="card-tagline">Customer Experience suite covering the full front office: Sales Cloud, Service Cloud, Commerce Cloud, and Marketing Cloud, all AI-enhanced.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Sales Cloud: pipeline management, AI-powered lead scoring, and opportunity insights</div>
+    <div class="bul">Service Cloud: AI-assisted case resolution, chatbots, and field service management</div>
+    <div class="bul">Commerce Cloud: personalised product recommendations and AI-driven merchandising</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Lead scoring:</strong> AI analyses 2,000 pipeline leads and scores each one based on engagement and historical win patterns. Sales team focuses on the top 80 most likely to close this quarter</div>
+    <div class="exitem"><strong>Service deflection:</strong> AI chatbot in Service Cloud resolves 45% of incoming queries automatically before they reach a human agent, reducing average handle time by 3 minutes per case</div>
+    <div class="exitem"><strong>Commerce personalisation:</strong> A returning customer sees a homepage curated by AI based on purchase history and browsing behaviour. Conversion rate increases 18%</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Sales teams</span><span class="who-pill">Customer service</span><span class="who-pill">Marketing</span><span class="who-pill">E-commerce</span></div>
+  </div>
+
+  <div class="card" id="card-concur">
+    <div class="card-top"><div class="card-title">SAP Concur</div><span class="card-badge" style="background:#FAECE7;color:#712B13">Business App</span></div>
+    <div class="card-tagline">Travel and expense management. Automates trip booking, expense submission, and policy compliance, with AI handling receipt reading and fraud detection.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Integrated travel booking within company policy limits and preferred vendor rates</div>
+    <div class="bul">AI reads receipts automatically and pre-fills expense reports from photos (ExpenseIt)</div>
+    <div class="bul">AI detects fraudulent and duplicate expense patterns post-submission (Concur Verify)</div>
+    <div class="bul">Out-of-policy bookings are blocked by a rule-based policy engine configured by admins, not AI</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Receipt capture (AI):</strong> Employee photographs a restaurant receipt. Concur AI reads the amount, date, vendor, and currency automatically and creates the expense line. Entire report submitted in 90 seconds</div>
+    <div class="exitem"><strong>Policy enforcement (rules engine):</strong> A hotel booking above the city rate cap is blocked before confirmation by Concur's policy engine. The employee is prompted to select a compliant option. This is deterministic rule enforcement, not AI</div>
+    <div class="exitem"><strong>Fraud detection (AI):</strong> Concur Verify AI identifies an employee submitting the same taxi receipt across two different expense reports in the same week and alerts finance before payment is made</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">All travelling employees</span><span class="who-pill">Finance</span><span class="who-pill">Procurement</span></div>
+  </div>
+
+  <div class="card" id="card-aicore">
+    <div class="card-top"><div class="card-title">AI Core</div><span class="card-badge" style="background:#EAF3DE;color:#27500A">BTP - AI Service</span></div>
+    <div class="card-tagline">The engine room of SAP AI. Where models are deployed, trained, and served at scale. Users never see it directly but every AI feature in SAP runs through it.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Hosts and runs AI models, both SAP's own and custom partner-built ones</div>
+    <div class="bul">Manages GPU compute for model training and inference at enterprise scale</div>
+    <div class="bul">Runs RAG pipelines connecting company documents and data to LLMs</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Invoice classifier:</strong> Custom ML model trained on 3 years of invoice data runs on AI Core, coding incoming invoices to GL accounts with 94% accuracy, replacing a 4-person manual team</div>
+    <div class="exitem"><strong>HR policy bot:</strong> A partner builds an employee Q&amp;A bot. AI Core runs the RAG pipeline, retrieves relevant HR policy documents from HANA, and passes them to the LLM to answer employee questions accurately</div>
+    <div class="exitem"><strong>Custom forecast model:</strong> Manufacturer trains a demand forecasting model on AI Core using 5 years of sales history, outperforming the statistical baseline by 22%</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">SAP internally</span><span class="who-pill">Partner architects</span><span class="who-pill">AI builders</span></div>
+  </div>
+
+  <div class="card" id="card-genaihub">
+    <div class="card-top"><div class="card-title">GenAI Hub</div><span class="card-badge" style="background:#EAF3DE;color:#27500A">BTP - AI Service</span></div>
+    <div class="card-tagline">One governed gateway to OpenAI, Anthropic Claude, Google Gemini, and Mistral from inside SAP BTP, with full cost tracking and data privacy controls built in.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Single API to call any major LLM without managing separate contracts or API keys</div>
+    <div class="bul">Tracks token cost per model, per use case, per team with budget enforcement</div>
+    <div class="bul">Business data never leaves SAP's governed environment to train external models</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Contract intelligence:</strong> Logistics company routes 500-page freight contracts through GenAI Hub to GPT-4 for automatic clause extraction and risk flagging. 4 hours of lawyer time reduced to 8 minutes</div>
+    <div class="exitem"><strong>Model comparison:</strong> Team tests the same customer complaint prompt against Claude and Gemini side by side in GenAI Hub before going live. Picks the better model with data, not opinion</div>
+    <div class="exitem"><strong>Cost control:</strong> IT sets a monthly token budget per department. GenAI Hub enforces limits and alerts before overspend. No surprise cloud bills at month end</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Partner developers</span><span class="who-pill">IT architects</span><span class="who-pill">AI app builders</span></div>
+  </div>
+
+  <div class="card" id="card-ailaunchpad">
+    <div class="card-top"><div class="card-title">AI Launchpad</div><span class="card-badge" style="background:#EAF3DE;color:#27500A">BTP - AI Service</span></div>
+    <div class="card-tagline">The management cockpit for AI Core. Where data scientists and AI engineers monitor model deployments, track experiments, and manage the full model lifecycle.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Provides a UI to manage all AI Core scenarios, deployments, and configurations</div>
+    <div class="bul">Tracks model training experiments, versions, and performance metrics side by side</div>
+    <div class="bul">Monitors live model deployments and resource consumption in real time</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Model versioning:</strong> Data scientist trains 3 versions of a demand forecast model. AI Launchpad shows accuracy metrics side by side. Version 3 wins and is promoted to production with one click</div>
+    <div class="exitem"><strong>Drift detection:</strong> The invoice classification model shows accuracy drift after a supplier changes their invoice format. AI Launchpad flags the performance drop and triggers a retraining job</div>
+    <div class="exitem"><strong>Resource management:</strong> Two low-usage model deployments are consuming 30% of AI Core compute. Operations team scales them down through AI Launchpad, reducing costs immediately</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Data scientists</span><span class="who-pill">AI engineers</span><span class="who-pill">ML ops teams</span></div>
+  </div>
+
+  <div class="card" id="card-buildapps">
+    <div class="card-top"><div class="card-title">SAP Build Apps</div><span class="card-badge" style="background:#EAF3DE;color:#27500A">BTP - Development</span></div>
+    <div class="card-tagline">Drag-and-drop app builder on BTP. Business users and developers build professional mobile and web applications without writing code.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Visual drag-and-drop interface for building responsive web and mobile apps</div>
+    <div class="bul">Connects natively to SAP backend systems and external APIs</div>
+    <div class="bul">AI assists with layout suggestions and logic generation from plain English descriptions</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Capex approval app:</strong> Finance team builds a multi-level capex approval app in 2 weeks with routing into S/4HANA. No ABAP developer needed, no IT backlog to wait for</div>
+    <div class="exitem"><strong>Site inspection app:</strong> Health and safety team builds a mobile inspection checklist for factory floor use. Findings sync directly to S/4HANA plant maintenance in real time</div>
+    <div class="exitem"><strong>Customer portal:</strong> A wholesale company builds a self-service order status portal for B2B customers connected live to S/4HANA order data, replacing a daily email update process</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Business analysts</span><span class="who-pill">Citizen developers</span><span class="who-pill">IT teams</span></div>
+  </div>
+
+  <div class="card" id="card-buildpa">
+    <div class="card-top"><div class="card-title">Build Process Automation</div><span class="card-badge" style="background:#EAF3DE;color:#27500A">BTP - Development</span></div>
+    <div class="card-tagline">Workflow design and RPA on BTP. Automates repetitive human tasks and multi-step approval processes across SAP and non-SAP systems.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Visual workflow builder for approval routing, notifications, and escalations</div>
+    <div class="bul">RPA bots that mimic human actions in SAP GUI and web applications</div>
+    <div class="bul">AI suggests automation opportunities from existing process logs</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Goods receipt bot:</strong> RPA bot opens SAP, reads delivery notes from email, and posts goods receipts automatically every morning at 6am, freeing the warehouse team's first hour every day</div>
+    <div class="exitem"><strong>Onboarding workflow:</strong> HR triggers a new joiner workflow that creates user accounts, assigns equipment, and notifies 8 departments simultaneously on the hire date</div>
+    <div class="exitem"><strong>Invoice processing:</strong> Bot extracts data from PDF invoices, validates against PO in S/4HANA, posts matched invoices automatically, and routes exceptions to the AP team with full context attached</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Process owners</span><span class="who-pill">Business analysts</span><span class="who-pill">RPA developers</span></div>
+  </div>
+
+  <div class="card" id="card-integration">
+    <div class="card-top"><div class="card-title">Integration Suite</div><span class="card-badge" style="background:#EAF3DE;color:#27500A">BTP - Integration</span></div>
+    <div class="card-tagline">The pipes connecting SAP to everything else. APIs, events, and pre-built connectors that make every system talk to every other system in real time.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">API management: publish, govern, and monitor APIs across your landscape</div>
+    <div class="bul">Event mesh: real-time event streaming so systems react instantly to each other</div>
+    <div class="bul">Pre-built integration flows for common SAP to third-party scenarios</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>E-commerce live sync:</strong> Every Shopify order instantly creates a sales order in S/4HANA, checks warehouse stock, and sends a customer confirmation, all in under 3 seconds</div>
+    <div class="exitem"><strong>Bank statements:</strong> Statements from 12 banks in 8 countries flow into S/4HANA automatically each morning, eliminating manual uploads by the treasury team</div>
+    <div class="exitem"><strong>AI action pipe:</strong> When an AI agent in AI Core decides to block a supplier payment due to risk score, Integration Suite carries that instruction to S/4HANA and executes the block automatically</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Integration architects</span><span class="who-pill">API teams</span><span class="who-pill">Developers</span></div>
+  </div>
+
+  <div class="card" id="card-kyma">
+    <div class="card-top"><div class="card-title">Kyma Runtime</div><span class="card-badge" style="background:#EAF3DE;color:#27500A">BTP - Runtime</span></div>
+    <div class="card-tagline">Container-based extension environment on BTP. Where developers deploy microservices, AI workloads, and custom extensions using Kubernetes without managing infrastructure.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Managed Kubernetes environment on BTP for containerised application deployment</div>
+    <div class="bul">Ideal for running custom AI microservices, event-driven extensions, and APIs</div>
+    <div class="bul">Connects back to S/4HANA and other SAP systems via pre-built connectors</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>AI microservice:</strong> A partner deploys a custom document classification AI as a Docker container on Kyma. It receives documents from S/4HANA via event mesh, classifies them, and posts results back automatically</div>
+    <div class="exitem"><strong>Real-time pricing:</strong> A retailer runs a pricing engine on Kyma recalculating prices every 5 minutes based on competitor data and stock levels, feeding back into S/4HANA sales orders</div>
+    <div class="exitem"><strong>Multi-cloud workload:</strong> Company runs S/4HANA on Azure but deploys a specialist ML model on AWS via Kyma on BTP, connecting both without managing the cross-cloud complexity themselves</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Developers</span><span class="who-pill">DevOps teams</span><span class="who-pill">AI engineers</span></div>
+  </div>
+
+  <div class="card" id="card-cf">
+    <div class="card-top"><div class="card-title">Cloud Foundry</div><span class="card-badge" style="background:#EAF3DE;color:#27500A">BTP - Runtime</span></div>
+    <div class="card-tagline">The most widely used BTP application runtime. Where most SAP BTP applications including those built with CAP framework are deployed and run.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Platform-as-a-Service runtime for deploying Node.js, Java, Python, and other apps</div>
+    <div class="bul">Manages app lifecycle, scaling, and availability automatically</div>
+    <div class="bul">Most SAP-standard BTP extensions and CAP-based apps run here by default</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>CAP app deployment:</strong> Development team builds a custom approval app using SAP Cloud Application Programming model and pushes it to Cloud Foundry with one command. BTP handles scaling, availability, and patching automatically</div>
+    <div class="exitem"><strong>AI service hosting:</strong> A GenAI Hub-powered document summarisation service is deployed to Cloud Foundry as a Node.js microservice. It scales automatically during peak invoice processing periods</div>
+    <div class="exitem"><strong>Clean extension:</strong> Instead of modifying S/4HANA core, a team builds a complex pricing calculation app in Cloud Foundry that S/4HANA calls via API. Zero core modification, full flexibility</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">BTP developers</span><span class="who-pill">CAP teams</span><span class="who-pill">IT architects</span></div>
+  </div>
+
+  <div class="card" id="card-globalaccount">
+    <div class="card-top"><div class="card-title">Global Account</div><span class="card-badge" style="background:#EAF3DE;color:#27500A">BTP - Structure</span></div>
+    <div class="card-tagline">The top-level container in BTP tied directly to your SAP contract. Everything on BTP lives inside your Global Account. One per SAP customer contract.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Holds all BTP entitlements purchased under your SAP contract</div>
+    <div class="bul">Parent container for all Subaccounts, Directories, and environments</div>
+    <div class="bul">Manages overall quota distribution across the organisation</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Enterprise setup:</strong> A global company has one BTP Global Account under their enterprise licence. Inside it they create 3 Directories: Europe, Americas, and Asia Pacific. Each region manages its own Subaccounts independently but billing is consolidated at Global Account level</div>
+    <div class="exitem"><strong>Entitlement management:</strong> The Global Account holds 1,000 AI Core compute hours and 5TB of HANA Cloud storage. IT distributes these across Subaccounts based on project needs and tracks consumption centrally</div>
+    </div>
+    <div class="sec">WHO MANAGES IT</div>
+    <div class="who"><span class="who-pill">BTP administrators</span><span class="who-pill">IT leadership</span><span class="who-pill">SAP account team</span></div>
+  </div>
+
+  <div class="card" id="card-subaccount">
+    <div class="card-top"><div class="card-title">Subaccount</div><span class="card-badge" style="background:#EAF3DE;color:#27500A">BTP - Structure</span></div>
+    <div class="card-tagline">The isolation unit inside BTP. Not a product you buy but the way you separate Dev, QA, and Production so a broken experiment never reaches live business operations.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Isolates environments so Dev failures cannot reach Production</div>
+    <div class="bul">Controls which BTP services each environment can use via entitlements</div>
+    <div class="bul">Manages users, roles, and cost tracking independently per environment</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Safe testing:</strong> Developer tests a new GenAI Hub integration in the Dev subaccount and it crashes badly. Production is completely unaffected because they are isolated environments with separate service instances</div>
+    <div class="exitem"><strong>Cost per team:</strong> Company creates subaccounts per business unit. Monthly BTP cost report shows exactly how much each unit consumed in AI Core tokens, HANA storage, and integration calls</div>
+    <div class="exitem"><strong>GDPR compliance:</strong> EU subaccount has data residency locked to Germany. US subaccount runs on AWS US-East with different governance rules. Two regions, two rule sets, one Global Account</div>
+    </div>
+    <div class="sec">WHO MANAGES IT</div>
+    <div class="who"><span class="who-pill">BTP admins</span><span class="who-pill">Architects</span><span class="who-pill">Security teams</span></div>
+  </div>
+
+  <div class="card" id="card-hana">
+    <div class="card-top"><div class="card-title">SAP HANA Cloud</div><span class="card-badge" style="background:#E6F1FB;color:#0C447C">Data Foundation</span></div>
+    <div class="card-tagline">The in-memory database powering every SAP application. Processes data at speed no traditional database can match and stores AI memory through its vector engine.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Processes all SAP transactional data in memory, no overnight batch runs needed</div>
+    <div class="bul">Built-in vector engine stores AI embeddings natively alongside business data</div>
+    <div class="bul">Foundation for all analytics, AI inference, and real-time reporting in SAP</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Real-time close:</strong> Global manufacturer runs month-end financial close in 2 hours instead of 3 days. HANA processes all consolidation in-memory with no overnight batch jobs</div>
+    <div class="exitem"><strong>AI memory:</strong> 4,000 SAP support KB articles stored as vectors in HANA. When a user asks Joule a question, HANA finds the 5 most relevant articles in milliseconds and passes them to the LLM</div>
+    <div class="exitem"><strong>Fraud detection:</strong> HANA runs real-time pattern matching on every payment transaction as it posts, flagging anomalies before they complete, not after the damage is done</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Data architects</span><span class="who-pill">All SAP apps</span><span class="who-pill">AI builders</span></div>
+  </div>
+
+  <div class="card" id="card-vector">
+    <div class="card-top"><div class="card-title">HANA Vector Engine</div><span class="card-badge" style="background:#E6F1FB;color:#0C447C">Data Foundation</span></div>
+    <div class="card-tagline">The AI memory capability built inside HANA Cloud. Stores and searches vector embeddings so SAP AI can retrieve relevant knowledge from your company data instantly.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Stores text, documents, and SAP data as mathematical vectors called embeddings</div>
+    <div class="bul">Performs similarity search to find the most relevant content for any AI query</div>
+    <div class="bul">Powers RAG so LLMs answer questions using your actual company knowledge</div>
+    <div class="sec">WHAT IS RAG?</div>
+    <div class="bul">Retrieval Augmented Generation. Instead of the LLM guessing from its training, it first retrieves relevant documents from HANA Vector Engine and uses those as context to give a precise, grounded answer</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Policy Q&amp;A bot:</strong> 500 HR policy documents stored as vectors. Employee asks about the maternity leave policy in Germany. The vector engine finds the exact relevant section in milliseconds and the LLM answers precisely</div>
+    <div class="exitem"><strong>Maintenance knowledge:</strong> 10 years of equipment maintenance reports stored as vectors. Technician asks what was done last time a pump failed. Vector engine retrieves the relevant historical reports instantly</div>
+    <div class="exitem"><strong>Contract search:</strong> 2,000 supplier contracts stored as vectors. Legal team asks which contracts have a force majeure clause covering pandemics. Answer returned in seconds across all 2,000 documents</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">AI architects</span><span class="who-pill">Developers</span><span class="who-pill">Data engineers</span></div>
+  </div>
+
+  <div class="card" id="card-datasphere">
+    <div class="card-top"><div class="card-title">SAP Datasphere</div><span class="card-badge" style="background:#E6F1FB;color:#0C447C">Data Foundation</span></div>
+    <div class="card-tagline">SAP's data fabric. Connects SAP and non-SAP data into one trusted semantic layer so AI models always work with clean, meaningful, governed data.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Connects S/4HANA, Salesforce, Azure, and others without physically moving data</div>
+    <div class="bul">Adds business meaning to raw tables so AI understands context, not just column names</div>
+    <div class="bul">Feeds AI models and analytics tools with governed, lineage-tracked data</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>360 customer view:</strong> Retailer combines S/4 order data, Salesforce CRM, and loyalty app data in Datasphere. AI churn model now sees the full customer picture, not just one system's slice</div>
+    <div class="exitem"><strong>Semantic layer:</strong> Raw S/4 table BSEG means nothing to an LLM. Datasphere maps it to "accounting line items" with proper business labels. Now Joule can answer financial questions because it understands what the data means</div>
+    <div class="exitem"><strong>ESG reporting:</strong> Carbon emissions from IoT sensors, logistics providers, and S/4 all land in Datasphere, get harmonised, and feed an AI-assisted sustainability report. One version of the truth</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Data engineers</span><span class="who-pill">Analytics teams</span><span class="who-pill">AI architects</span></div>
+  </div>
+
+  <div class="card" id="card-sac">
+    <div class="card-top"><div class="card-title">SAP Analytics Cloud</div><span class="card-badge" style="background:#E6F1FB;color:#0C447C">Data Foundation</span></div>
+    <div class="card-tagline">SAP's BI and planning tool. Dashboards, built-in ML forecasting, and natural language queries that turn AI outputs into decisions business leaders can act on.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Live dashboards and reports connected directly to S/4HANA and Datasphere</div>
+    <div class="bul">Smart Predict: built-in ML for forecasting, classification, and regression without needing a data scientist</div>
+    <div class="bul">Natural language questions converted to charts and reports automatically</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>One-minute forecast:</strong> CFO asks SAC to forecast next quarter revenue by region. Smart Predict builds a model on historical data and returns a forecast with confidence intervals in under 60 seconds</div>
+    <div class="exitem"><strong>Natural language chart:</strong> Analyst types a query for the top 10 customers by margin decline this year vs last year and SAC generates the chart instantly with no manual configuration required</div>
+    <div class="exitem"><strong>Live financial planning:</strong> Finance runs driver-based P&amp;L planning in SAC. Change one assumption and the full income statement recalculates instantly across all entities and currencies</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Business analysts</span><span class="who-pill">Finance planners</span><span class="who-pill">Executives</span></div>
+  </div>
+
+  <div class="card" id="card-mdg">
+    <div class="card-top"><div class="card-title">Master Data Governance</div><span class="card-badge" style="background:#E6F1FB;color:#0C447C">Data Foundation</span></div>
+    <div class="card-tagline">SAP's master data quality and governance tool. Ensures customer, vendor, material, and financial data is accurate and consistent before AI ever touches it.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Central governance for customer, vendor, material, and financial master data</div>
+    <div class="bul">Approval workflows for creating and changing master data records</div>
+    <div class="bul">Duplicate detection and data quality scoring across all master data domains</div>
+    <div class="bul">AI is only as good as the data it runs on. MDG is what makes that data trustworthy</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Duplicate cleanup:</strong> MDG scans 80,000 vendor records and finds 4,200 duplicates across legacy systems. Deduplication prevents double payments and incorrect AI risk scoring on the wrong vendor record</div>
+    <div class="exitem"><strong>Change governance:</strong> A buyer tries to change a vendor's bank account details. MDG intercepts and routes it through a 3-level approval workflow including finance and compliance, preventing a common fraud vector</div>
+    <div class="exitem"><strong>AI data quality:</strong> Before training an invoice classification AI model, MDG ensures all GL accounts, cost centres, and vendor categories are clean. Model accuracy improves from 78% to 94%</div>
+    </div>
+    <div class="sec">WHO USES IT</div>
+    <div class="who"><span class="who-pill">Data stewards</span><span class="who-pill">Finance</span><span class="who-pill">Procurement</span><span class="who-pill">IT governance</span></div>
+  </div>
+
+  <div class="card" id="card-aws">
+    <div class="card-top"><div class="card-title">AWS</div><span class="card-badge" style="background:#F1EFE8;color:#444441">Hyperscaler</span></div>
+    <div class="card-tagline">Amazon Web Services. One of three hyperscalers on which RISE with SAP can be hosted. SAP manages everything above the infrastructure. The customer chooses the cloud provider.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Provides physical compute, storage, and network underneath SAP's cloud products</div>
+    <div class="bul">SAP operates and manages the SAP layer on top. Customer never manages AWS directly</div>
+    <div class="bul">AWS regions determine where customer data physically resides for compliance purposes</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Data residency:</strong> A US financial services company chooses RISE on AWS US-East to keep all financial data within United States borders for regulatory compliance</div>
+    <div class="exitem"><strong>Ecosystem alignment:</strong> A company already running workloads on AWS chooses RISE on AWS so their SAP system sits in the same cloud ecosystem as their existing data warehouse and analytics infrastructure</div>
+    </div>
+    <div class="sec">WHO CHOOSES IT</div>
+    <div class="who"><span class="who-pill">CIO office</span><span class="who-pill">IT architects</span><span class="who-pill">SAP account team</span></div>
+  </div>
+
+  <div class="card" id="card-azure">
+    <div class="card-top"><div class="card-title">Microsoft Azure</div><span class="card-badge" style="background:#F1EFE8;color:#444441">Hyperscaler</span></div>
+    <div class="card-tagline">The most commonly chosen hyperscaler for RISE with SAP, particularly for companies already in the Microsoft ecosystem with Teams, Office 365, and Azure data services.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Provides physical infrastructure for RISE with SAP hosting globally</div>
+    <div class="bul">Strong integration between SAP on Azure and Microsoft Teams, Power BI, and Azure OpenAI</div>
+    <div class="bul">Azure regions cover most compliance jurisdictions including Germany, UAE, and India</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>Microsoft ecosystem:</strong> A company using Teams and Power BI chooses RISE on Azure. SAP data flows directly into Power BI via Azure connectors and Joule conversations surface in Teams channels</div>
+    <div class="exitem"><strong>European compliance:</strong> A German manufacturer chooses RISE on Azure Germany North to keep all data within Germany, satisfying strict GDPR and works council requirements</div>
+    </div>
+    <div class="sec">WHO CHOOSES IT</div>
+    <div class="who"><span class="who-pill">CIO office</span><span class="who-pill">IT architects</span><span class="who-pill">SAP account team</span></div>
+  </div>
+
+  <div class="card" id="card-gcp">
+    <div class="card-top"><div class="card-title">Google Cloud (GCP)</div><span class="card-badge" style="background:#F1EFE8;color:#444441">Hyperscaler</span></div>
+    <div class="card-tagline">Chosen by companies wanting deep AI and ML integration between SAP and Google's Vertex AI, BigQuery, and Gemini ecosystem.</div>
+    <div class="sec">WHAT IT DOES</div>
+    <div class="bul">Provides physical infrastructure for RISE with SAP hosting</div>
+    <div class="bul">Strong integration between SAP on GCP and Google BigQuery, Looker, and Vertex AI</div>
+    <div class="bul">Gemini models available in SAP GenAI Hub when running on GCP infrastructure</div>
+    <div class="exbox"><div class="exlabel">REAL EXAMPLES</div>
+    <div class="exitem"><strong>AI-first strategy:</strong> A retail company with deep Google AI investment chooses RISE on GCP. SAP transactional data flows into BigQuery for advanced ML modelling using Vertex AI alongside SAP's own AI features</div>
+    <div class="exitem"><strong>Analytics integration:</strong> Finance team uses Looker connected to both SAP HANA Cloud on GCP and BigQuery to build a unified analytics layer spanning SAP and non-SAP data without data movement</div>
+    </div>
+    <div class="sec">WHO CHOOSES IT</div>
+    <div class="who"><span class="who-pill">CIO office</span><span class="who-pill">IT architects</span><span class="who-pill">SAP account team</span></div>
+  </div>
+
+</div>
+</div>
+<div class="foot">SAP and Business AI Architecture - Learning Edition - 30 components - 6 layers - For SAP consultants, students, and partners</div>
+</div>
+<script>
+function show(id,el){
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('visible'));
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  const card=document.getElementById('card-'+id);
+  const empty=document.getElementById('empty');
+  if(card){card.classList.add('visible');empty.style.display='none';}
+  if(el)el.classList.add('active');
+}
+</script>
